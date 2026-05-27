@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翊龙空天 · YilongSpace — 寻找共建者</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === 基础样式与变量 === */
+:root {
+  --gold: #c8a45c; --gold-light: #e8d5a3; --red: #c0392b;
+  --bg: #080810; --card: rgba(20, 20, 35, 0.85);
+  --text: #e0e0e0; --dim: #888;
+  --font-cn: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-en: 'Roboto Mono', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+html[lang="en"] { font-family: var(--font-en); }
+html[lang="zh-CN"] { font-family: var(--font-cn); }
+body { margin:0; background: var(--bg); color: var(--text); overflow-x:hidden; }
+.hidden { display:none !important; }
+
+/* === 动态星空背景 === */
+#stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* === 导航栏 (含Logo) === */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; background: rgba(8,8,16,0.85); backdrop-filter:blur(10px); border-bottom:1px solid rgba(200,164,92,0.2); }
+nav .container { display:flex; justify-content:space-between; align-items:center; height:70px; max-width:1200px; margin:0 auto; padding:0 20px; }
+.logo { display:flex; align-items:center; gap:12px; font-weight:700; color:var(--gold); letter-spacing:0.1em; }
+.logo svg { width:44px; height:44px; flex-shrink:0; }
+.logo-text { display:flex; flex-direction:column; line-height:1.2; }
+.logo-cn { font-size:1.1rem; }
+.logo-en { font-size:0.7rem; color:var(--dim); letter-spacing:0.2em; font-family: var(--font-en); }
+.lang-switch button { background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 12px; cursor:pointer; border-radius:3px; font-size:0.8rem; }
+.lang-switch button:hover { background:var(--gold); color:#000; }
+
+/* === 英雄区域 (Hero) === */
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; padding:100px 20px 0; }
+.hero h1 { font-size:clamp(2.5rem, 6vw, 4.5rem); font-weight:900; line-height:1.1; margin-bottom:10px; }
+.hero h1 span { color:var(--gold); display:block; }
+
+/* === 强国标语 === */
+.slogan-container { margin: 5px auto 20px; max-width: 900px; padding: 10px; }
+.slogan-text { font-family: 'Ma Shan Zheng', cursive; font-size: clamp(1.8rem, 4vw, 3.2rem); color: #f5e6c8; text-shadow: 0 0 10px rgba(200, 164, 92, 0.7), 0 0 20px rgba(200, 164, 92, 0.5); letter-spacing: 0.1em; }
+.sub-slogan { color:rgba(255,255,255,0.7); margin-top:5px; font-size:0.9rem; letter-spacing:0.1em; }
+
+/* === 全球招募令 (英文版专用) === */
+.hacker-manifesto {
+  max-width: 800px; margin: 20px auto 30px; padding: 20px;
+  border: 1px solid rgba(200, 164, 92, 0.2); background: rgba(0,0,0,0.3);
+  text-align: left; font-family: 'Roboto Mono', monospace; font-size: 0.85rem; line-height: 1.6;
+}
+.hacker-manifesto ul { list-style: none; padding: 0; }
+.hacker-manifesto li::before { content: "> "; color: var(--gold); font-weight: bold; }
+.hacker-manifesto strong { color: #fff; }
+
+/* === 其余样式 === */
+.hero p { font-size:1.1rem; color:var(--dim); max-width:600px; margin:0 auto 30px; line-height:1.8; }
+.cta-btn { background:linear-gradient(135deg, var(--gold), #a08040); color:#000; padding:15px 40px; border:none; font-size:1rem; font-weight:700; cursor:pointer; border-radius:4px; transition:transform .2s; }
+.cta-btn:hover { transform:scale(1.05); }
+section { padding:80px 20px; position:relative; z-index:1; }
+.container { max-width:1100px; margin:0 auto; }
+h2 { font-size:2.2rem; color:#fff; margin-bottom:20px; }
+.section-intro { color:var(--dim); max-width:700px; margin-bottom:40px; }
+.manifesto-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; }
+.card { background:var(--card); border:1px solid rgba(200,164,92,0.1); padding:30px; border-radius:8px; transition:border-color .3s; }
+.card:hover { border-color:var(--gold); }
+.card h3 { color:var(--gold); margin-bottom:10px; font-size:1.1rem; }
+.card p { color:var(--dim); font-size:0.9rem; line-height:1.6; }
+.job-list { display:flex; flex-direction:column; gap:15px; }
+.job-item { background:var(--card); border-left:4px solid var(--gold); padding:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.job-info h4 { margin:0 0 5px; color:#fff; }
+.job-info span { font-size:0.85rem; color:var(--dim); }
+.job-tag { background:rgba(192,57,43,0.2); color:var(--red); padding:4px 10px; border-radius:3px; font-size:0.75rem; font-weight:bold; }
+.form-wrap { background:var(--card); padding:40px; border-radius:8px; max-width:700px; margin:0 auto; }
+.form-group { margin-bottom:20px; }
+.form-group label { display:block; margin-bottom:8px; color:var(--gold); }
+.form-group input, .form-group select, .form-group textarea { width:100%; padding:12px; background:#10101f; border:1px solid #333; color:#fff; border-radius:4px; font-family:inherit; }
+.form-group textarea { min-height:120px; }
+.submit-btn { width:100%; padding:15px; background:var(--gold); border:none; color:#000; font-size:1.1rem; font-weight:700; cursor:pointer; border-radius:4px; }
+footer { text-align:center; padding:40px 20px; color:var(--dim); font-size:0.8rem; border-top:1px solid #222; }
+@media(max-width:768px){ .hero h1 { font-size:2rem; } .job-item { flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<nav>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#c8a45c;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#e8d5a3;stop-opacity:1" />
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <path d="M50 10 L90 90 L50 70 L10 90 Z" fill="url(#goldGrad)" filter="url(#glow)" opacity="0.9"/>
+        <path d="M50 15 L50 85" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="50" cy="50" r="35" stroke="rgba(200,164,92,0.3)" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-cn">翊龙空天</span>
+        <span class="logo-en">YILONGSPACE</span>
+      </div>
+    </div>
+
+    <div class="lang-switch">
+      <button onclick="setLang('zh-CN')">中文</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1 data-key="heroTitle">翊龙在此<br><span>直上星渊</span></h1>
+    
+    <!-- 中文标语 -->
+    <div class="slogan-container" data-lang="zh-CN">
+      <div class="slogan-text">科技兴国 · 科技报国 · 科技强国</div>
+      <div class="sub-slogan">立足华夏 · 汇智全球 · 无问西东</div>
+    </div>
+
+    <!-- 英文极客招募令 -->
+    <div class="hacker-manifesto hidden" data-lang="en">
+      <ul>
+        <li><strong>We don't need your diploma.</strong></li>
+        <li>We don't care about your nationality.</li>
+        <li>We don't do PowerPoints. We do Hot-Fire tests.</li>
+        <li>If you can solve Navier-Stokes, weld Inconel, or code a flight computer...</li>
+        <li><strong>50% of the company is waiting for you.</strong></li>
+      </ul>
+    </div>
+
+    <p data-key="heroDesc">
+      当年我们用算盘打出了原子弹，今天我们要用钢铁与火焰追平星舰的差距。<br>
+      翊龙空天扎根中国，面向全球。我们不论国籍肤色，只论谁能造出飞得最高的箭。<br>
+      我们预留了 <strong>50% 的股权</strong> 给第一批真正敢于下场的共建者。
+    </p>
+    <button class="cta-btn" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})" data-key="heroBtn">加入共建</button>
+  </div>
+</section>
+
+<!-- 核心价值观 -->
+<section>
+  <div class="container">
+    <h2 data-key="manifestoTitle">为何此时？为何翊龙？</h2>
+    <p class="section-intro" data-key="manifestoIntro">伟大的火箭由伟大的人建造，无关国界。我们提供资源，你带来执念。</p>
+    <div class="manifesto-grid">
+      <div class="card">
+        <h3 data-key="m1t">全栈自研</h3>
+        <p data-key="m1d">从重型可回收火箭，到对标星链的通信星座。我们不组装零件，我们定义系统。</p>
+      </div>
+      <div class="card">
+        <h3 data-key="m2t">股权共享</h3>
+        <p data-key="m2d">创始人拿出 50% 股份寻找合伙人。在这里，你是 Co-Founder，不是打工仔。</p>
+      </div>
+      <div class="card">
+        <h3 data-key="m3t">工程至上</h3>
+        <p data-key="m3d">拒绝 PPT 造火箭。我们需要能解决问题的人，而不是擅长汇报的人。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 招募职位 -->
+<section>
+  <div class="container">
+    <h2 data-key="jobsTitle">核心共建岗位</h2>
+    <p class="section-intro" data-key="jobsIntro">以下岗位均为创始团队级别（Founding Team），薪资面议，股权激励上不封顶。</p>
+    <div class="job-list">
+      <div class="job-item">
+        <div class="job-info">
+          <h4 data-key="j1t">首席推进工程师 / CTO</h4>
+          <span data-key="j1d">主导液氧甲烷发动机全流程，从图纸到热试车。</span>
+        </div>
+        <div class="job-tag" data-key="urgent">急招</div>
+      </div>
+      <div class="job-item">
+        <div class="job-info">
+          <h4 data-key="j2t">箭体总师 / GNC专家</h4>
+          <span data-key="j2d">负责箭体结构设计、制导与控制，确保入轨与回收精度。</span>
+        </div>
+        <div class="job-tag" data-key="urgent">急招</div>
+      </div>
+      <div class="job-item">
+        <div class="job-info">
+          <h4 data-key="j3t">星座系统架构师</h4>
+          <span data-key="j3d">设计星链级通信网络，规划频率、轨位与地面站。</span>
+        </div>
+        <div class="job-tag" data-key="urgent">急招</div>
+      </div>
+      <div class="job-item">
+        <div class="job-info">
+          <h4 data-key="j4t">制造与供应链负责人</h4>
+          <span data-key="j4d">在长三角建立供应链体系，解决“造得出”的问题。</span>
+        </div>
+        <div class="job-tag" data-key="urgent">急招</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 申请表单 -->
+<section id="apply">
+  <div class="container">
+    <h2 data-key="formTitle">投递你的简历</h2>
+    <p class="section-intro" data-key="formIntro">不需要客套话，请直接告诉我们你曾解决过的最难的问题。邮件也会同时抄送创始人。</p>
+    <div class="form-wrap">
+      <!-- ★★★ 表单提交地址已改为你的邮箱 ★★★ -->
+      <form id="applyForm" action="mailto:huanglong@88.com" method="post" enctype="text/plain">
+        <div class="form-group"><label data-key="f_name">姓名</label><input type="text" name="Name" required></div>
+        <div class="form-group"><label data-key="f_email">邮箱</label><input type="email" name="Email" required></div>
+        <div class="form-group"><label data-key="f_role">意向岗位</label>
+          <select name="Role">
+            <option>CTO / 推进</option>
+            <option>GNC / 总体</option>
+            <option>星座架构</option>
+            <option>供应链</option>
+            <option>其他 / Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label data-key="f_link">作品集 / GitHub / 论文链接</label><input type="url" name="Link"></div>
+        <div class="form-group"><label data-key="f_msg">一句话证明你是我们找的人</label><textarea name="Message"></textarea></div>
+        <button type="submit" class="submit-btn" data-key="f_submit">发送申请</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ★★★ 页脚联系方式已改为你的邮箱 ★★★ -->
+<footer>
+  © 2026 翊龙空天 (YilongSpace). All Rights Reserved.<br>
+  联系邮箱：<a href="mailto:huanglong@88.com" style="color:var(--gold);">huanglong@88.com</a>
+</footer>
+
+<script>
+// === 多语言文案配置 ===
+const translations = {
+  "zh-CN": {
+    heroTitle: "翊龙在此<br><span>直上星渊</span>",
+    heroDesc: "当年我们用算盘打出了原子弹，今天我们要用钢铁与火焰追平星舰的差距。<br>翊龙空天扎根中国，面向全球。我们不论国籍肤色，只论谁能造出飞得最高的箭。<br>我们预留了 <strong>50% 的股权</strong> 给第一批真正敢于下场的共建者。",
+    heroBtn: "加入共建",
+    manifestoTitle: "为何此时？为何翊龙？",
+    manifestoIntro: "伟大的火箭由伟大的人建造，无关国界。我们提供资源，你带来执念。",
+    m1t: "全栈自研", m1d: "从重型可回收火箭，到对标星链的通信星座。我们不组装零件，我们定义系统。",
+    m2t: "股权共享", m2d: "创始人拿出 50% 股份寻找合伙人。在这里，你是 Co-Founder，不是打工仔。",
+    m3t: "工程至上", m3d: "拒绝 PPT 造火箭。我们需要能解决问题的人，而不是擅长汇报的人。",
+    jobsTitle: "核心共建岗位",
+    jobsIntro: "以下岗位均为创始团队级别（Founding Team），薪资面议，股权激励上不封顶。",
+    j1t: "首席推进工程师 / CTO", j1d: "主导液氧甲烷发动机全流程，从图纸到热试车。",
+    j2t: "箭体总师 / GNC专家", j2d: "负责箭体结构设计、制导与控制，确保入轨与回收精度。",
+    j3t: "星座系统架构师", j3d: "设计星链级通信网络，规划频率、轨位与地面站。",
+    j4t: "制造与供应链负责人", j4d: "在长三角建立供应链体系，解决“造得出”的问题。",
+    urgent: "急招",
+    formTitle: "投递你的简历",
+    formIntro: "不需要客套话，请直接告诉我们你曾解决过的最难的问题。邮件也会同时抄送创始人。",
+    f_name: "姓名", f_email: "邮箱", f_role: "意向岗位", f_link: "作品集 / GitHub / 论文链接", f_msg: "一句话证明你是我们找的人", f_submit: "发送申请"
+  },
+  "en": {
+    heroTitle: "The Dragon Spreads Its Wings<br><span>To The Stars</span>",
+    heroDesc: "We built the atomic bomb with abacuses; today, we bridge the gap with steel and fire.<br>Based in China, open to the world. We don't care about your passport; we care about how much thrust you can deliver.<br>We have reserved <strong>50% equity</strong> for the first builders who dare to join.",
+    heroBtn: "Join the Mission",
+    manifestoTitle: "Why Now? Why YilongSpace?",
+    manifestoIntro: "Great rockets are built by great people, regardless of borders. We provide the resources, you bring the obsession.",
+    m1t: "Full Stack", m1d: "From heavy-lift reusable rockets to Starlink-class constellations. We don't assemble parts; we define systems.",
+    m2t: "Shared Equity", m2d: "The founder offers 50% of shares to partners. You are a Co-Founder, not an employee.",
+    m3t: "Engineering First", m3d: "No PowerPoint rockets. We need problem solvers, not reporters.",
+    jobsTitle: "Founding Team Openings",
+    jobsIntro: "These are Founding Team roles. Salary negotiable. Equity uncapped.",
+    j1t: "Chief Propulsion Engineer / CTO", j1d: "Lead LOX-Methane engine development from drawing board to hot-fire tests.",
+    j2t: "Vehicle Chief Engineer / GNC Expert", j2d: "Own structures, GNC, and landing precision for reusable vehicles.",
+    j3t: "Constellation System Architect", j3d: "Design Starlink-scale networks, manage spectrum, orbits, and ground segments.",
+    j4t: "Head of Manufacturing & Supply Chain", j4d: "Build the supply chain in the Yangtze Delta to solve the 'manufacturability' problem.",
+    urgent: "Urgent",
+    formTitle: "Send Your Resume",
+    formIntro: "Skip the fluff. Tell us the hardest problem you've solved. This goes directly to the founder.",
+    f_name: "Full Name", f_email: "Email", f_role: "Position Applying For", f_link: "Portfolio / GitHub / Papers Link", f_msg: "One sentence proving you are the one", f_submit: "Submit Application"
+  }
+};
+
+// === 切换语言函数 ===
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    if (el.getAttribute('data-lang') === lang) { el.classList.remove('hidden'); } 
+    else { el.classList.add('hidden'); }
+  });
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if (translations[lang][key]) { el.innerHTML = translations[lang][key]; }
+  });
+}
+
+// === 星空背景动画 ===
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5, d: Math.random() * 0.5 });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(200, 164, 92, 0.8)";
+  stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill(); s.y += s.d; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; } });
+  requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize', initStars);
+initStars();
+drawStars();
+
+// Default to Chinese
+setLang('zh-CN');
+</script>
+</body>
+</html>
